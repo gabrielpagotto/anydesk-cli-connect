@@ -33,9 +33,6 @@ int main()
 
     std::cout << std::endl << "Infome a opcao desejada: ";
 
-    std::string c_exe = (std::string) AD_EXE;
-    std::string c_id;
-    std::string command;
     std::string opc;
     std::cin >> opc;
 
@@ -44,6 +41,10 @@ int main()
         char c_str = opc[i];
         opc[i] = std::toupper(c_str);
     }
+
+    std::string c_exe = (std::string)AD_EXE;
+    std::string c_id;
+    std::string command;
 
     if (opc == C_ALEX)
     {
