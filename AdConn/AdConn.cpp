@@ -6,9 +6,9 @@
 #pragma execution_character_set( "utf-8" )
 
 constexpr auto AD_EXE = "\"C://Program Files (x86)//AnyDesk//AnyDesk.exe\"";
-constexpr auto AD_ID_VICTOR = "";;
-constexpr auto AD_ID_ALEX = "";;
-constexpr auto AD_ID_GABRIEL = "249558384";;
+constexpr auto AD_ID_ALEX = "761515821";
+constexpr auto AD_ID_GABRIEL = "249558384";
+constexpr auto AD_ID_VICTOR = "686573251";
 
 const std::string C_VICTOR = "V";
 const std::string C_ALEX = "A";
@@ -21,9 +21,9 @@ int main()
     std::cout << "Em qual computador deseja se conectar?" << std::endl << std::endl;
     std::map<std::string, std::string> conns;
 
-    conns[C_VICTOR] = "Victor";
     conns[C_ALEX] = "Alex";
     conns[C_GABRIEL] = "Gabriel";
+    conns[C_VICTOR] = "Victor";
 
     for (auto conn : conns)
     {
@@ -39,17 +39,17 @@ int main()
     std::string opc;
     std::cin >> opc;
 
-    if (opc == C_VICTOR)
-    {
-        c_id = (std::string) AD_ID_VICTOR;
-    } 
-    else if (opc == C_ALEX)
+    if (opc == C_ALEX)
     {
         c_id = (std::string) AD_ID_ALEX;
     }
     else if (opc == C_GABRIEL)
-    {   
+    {
         c_id = (std::string) AD_ID_GABRIEL;
+    }
+    else if (opc == C_VICTOR)
+    {
+        c_id = (std::string) AD_ID_VICTOR;
     }
     else
     {
