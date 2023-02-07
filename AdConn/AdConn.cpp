@@ -1,34 +1,55 @@
 #include<map>
 #include<string>
+#include <list>
 #include <iostream>
 #include <windows.h>
 
 #pragma execution_character_set( "utf-8" )
 
 constexpr auto AD_EXE = "\"C://Program Files (x86)//AnyDesk//AnyDesk.exe\"";
-constexpr auto AD_ID_ALEX = "761515821";
-constexpr auto AD_ID_GABRIEL = "249558384";
-constexpr auto AD_ID_VICTOR = "686573251";
 
-const std::string C_VICTOR = "V";
-const std::string C_ALEX = "A";
-const std::string C_GABRIEL = "G";
+class Conn {
+    
+    public:
+        std::string name;
+        std::string anydesk_id;
+        std::string selection_option;
 
-int main()
+        int connect()
+        {
+            std::string c_exe = (std::string)AD_EXE;
+            std::string command = c_exe.append(((std::string)" ").append((anydesk_id)));
+            return std::system(command.c_str());
+        }
+};
+
+int main(int argc, char** argv)
 {
     SetConsoleOutputCP(65001);
 
-    std::cout << "Em qual computador deseja se conectar?" << std::endl << std::endl;
-    std::map<std::string, std::string> conns;
+    Conn alex_conn;
+    alex_conn.name = "Alex";
+    alex_conn.anydesk_id = "761515821";
+    alex_conn.selection_option = "A";
 
-    conns[C_ALEX] = "Alex";
-    conns[C_GABRIEL] = "Gabriel";
-    conns[C_VICTOR] = "Victor";
+    Conn gabriel_conn;
+    gabriel_conn.name = "Gabriel";
+    gabriel_conn.anydesk_id = "249558384";
+    gabriel_conn.selection_option = "G";
+
+    Conn victor_conn;
+    victor_conn.name = "Victor";
+    victor_conn.anydesk_id = "686573251";
+    victor_conn.selection_option = "V";
+
+    std::list<Conn> conns = { alex_conn, gabriel_conn, victor_conn };
+
+    std::cout << "Em qual computador deseja se conectar?" << std::endl << std::endl;
 
     for (auto conn : conns)
     {
-        std::cout << conn.first + ". ";
-        std::cout << conn.second << std::endl;
+        std::cout << conn.selection_option + ". ";
+        std::cout << conn.name << std::endl;
     }
 
     std::cout << std::endl << "Infome a opcao desejada: ";
@@ -42,28 +63,14 @@ int main()
         opc[i] = std::toupper(c_str);
     }
 
-    std::string c_exe = (std::string)AD_EXE;
-    std::string c_id;
-    std::string command;
-
-    if (opc == C_ALEX)
+    for (auto conn : conns)
     {
-        c_id = (std::string) AD_ID_ALEX;
-    }
-    else if (opc == C_GABRIEL)
-    {
-        c_id = (std::string) AD_ID_GABRIEL;
-    }
-    else if (opc == C_VICTOR)
-    {
-        c_id = (std::string) AD_ID_VICTOR;
-    }
-    else
-    {
-        std::cout << std::endl << "Selecao invalida.";
-        return 1;
+        if (conn.selection_option == opc)
+        {
+            return conn.connect();
+        }
     }
 
-    command = c_exe.append(((std::string)" ").append((c_id)));
-    return std::system(command.c_str());
+    std::cout << std::endl << "Selecao invalida.";
+    return 0;
 }
