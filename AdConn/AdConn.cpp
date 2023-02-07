@@ -44,6 +44,18 @@ int main(int argc, char** argv)
 
     std::list<Conn> conns = { alex_conn, gabriel_conn, victor_conn };
 
+    for (int i = 0; i < argc; ++i)
+    {
+        char* arg = argv[i];
+        for (auto conn : conns)
+        {
+            if (arg == conn.anydesk_id || arg == conn.name || arg == conn.selection_option)
+            {
+                return conn.connect();
+            }
+        }
+    }
+
     std::cout << "Em qual computador deseja se conectar?" << std::endl << std::endl;
 
     for (auto conn : conns)
