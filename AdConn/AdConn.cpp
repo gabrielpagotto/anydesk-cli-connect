@@ -39,6 +39,12 @@ int main()
     std::string opc;
     std::cin >> opc;
 
+    for (int i = 0; i < opc.size(); i++)
+    {
+        char c_str = opc[i];
+        opc[i] = std::toupper(c_str);
+    }
+
     if (opc == C_ALEX)
     {
         c_id = (std::string) AD_ID_ALEX;
