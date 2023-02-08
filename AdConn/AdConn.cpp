@@ -1,4 +1,4 @@
-#include<string>
+#include <string>
 #include <list>
 #include <iostream>
 #include <windows.h>
@@ -8,14 +8,15 @@
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1;
 #include <experimental/filesystem>
 
-#pragma execution_character_set( "utf-8" )
+#pragma execution_character_set("utf-8")
 
 constexpr auto ANYDESK_CONN_F = "C:\\AnydeskConn";
 constexpr auto CONF_F = "C:\\AnydeskConn\\config.txt";
 
 std::string anydesk_exe;
 
-class Conn {
+class Conn
+{
 
 public:
 	std::string name;
@@ -25,21 +26,25 @@ public:
 	int connect()
 	{
 		std::string c_exe = (std::string)anydesk_exe;
-		std::string command = c_exe.append(((std::string)" ").append((anydesk_id)));
+		std::string command = c_exe.append(((std::string) " ").append((anydesk_id)));
 		auto c_value = std::system(command.c_str());
 		if (c_value == 1)
 		{
-			std::cout << "Caminho ou executavel AnyDesk invalido." << std::endl;
-			std::cout << "verifique no arquivo localizado em \"" << (std::string)CONF_F << "\"" << std::endl;
+			std::cout << "Caminho ou executavel AnyDesk invalido."
+				  << std::endl;
+			std::cout << "verifique no arquivo localizado em \""
+				  << (std::string)CONF_F
+				  << "\""
+				  << std::endl;
 		}
 		return c_value;
 	}
 };
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	SetConsoleOutputCP(65001);
-	std::list<Conn> conns = { };
+	std::list<Conn> conns = {};
 	std::experimental::filesystem::create_directory(ANYDESK_CONN_F);
 	std::fstream fconfig_f;
 	fconfig_f.open(CONF_F);
@@ -118,15 +123,20 @@ int main(int argc, char** argv)
 		ofconfig_f.open(CONF_F);
 		if (ofconfig_f.is_open())
 		{
-			ofconfig_f << "AnydeskExe=" << "Insira a localizacao do executavel do AnyDesk aqui" << std::endl;
+			ofconfig_f << "AnydeskExe="
+				   << "Insira a localizacao do executavel do AnyDesk aqui"
+				   << std::endl;
 		}
 		ofconfig_f.close();
-		std::cout << "Faltando configuracao do executavel AnyDesk, verifique no arquivo localizado em \"" << (std::string)CONF_F << "\"" << std::endl;
+		std::cout << "Faltando configuracao do executavel AnyDesk, verifique no arquivo localizado em \""
+			  << (std::string)CONF_F
+			  << "\""
+			  << std::endl;
 		return 0;
 	}
 	for (int i = 0; i < argc; ++i)
 	{
-		char* arg = argv[i];
+		char *arg = argv[i];
 		for (auto conn : conns)
 		{
 			if (arg == conn.anydesk_id || arg == conn.name || arg == conn.selection_option)
@@ -135,13 +145,15 @@ int main(int argc, char** argv)
 			}
 		}
 	}
-	std::cout << "Em qual computador deseja se conectar?" << std::endl << std::endl;
+	std::cout << "Em qual computador deseja se conectar?" << std::endl
+		  << std::endl;
 	for (auto conn : conns)
 	{
 		std::cout << conn.selection_option + ". ";
 		std::cout << conn.name << std::endl;
 	}
-	std::cout << std::endl << "Infome a opcao desejada: ";
+	std::cout << std::endl
+		  << "Infome a opcao desejada: ";
 	std::string opc;
 	std::cin >> opc;
 	for (int i = 0; i < opc.size(); i++)
@@ -156,6 +168,7 @@ int main(int argc, char** argv)
 			return conn.connect();
 		}
 	}
-	std::cout << std::endl << "Selecao invalida.";
+	std::cout << std::endl
+		  << "Selecao invalida.";
 	return 0;
 }
