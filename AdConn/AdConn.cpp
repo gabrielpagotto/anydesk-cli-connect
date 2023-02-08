@@ -1,12 +1,19 @@
-#include<map>
 #include<string>
 #include <list>
 #include <iostream>
 #include <windows.h>
+#include <fstream>
+#include <stdbool.h>
+
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING 1;
+#include <experimental/filesystem>
 
 #pragma execution_character_set( "utf-8" )
 
-constexpr auto AD_EXE = "\"C://Program Files (x86)//AnyDesk//AnyDesk.exe\"";
+constexpr auto ANYDESK_CONN_F = "C:\\AnydeskConn";
+constexpr auto CONF_F = "C:\\AnydeskConn\\config.txt";
+
+std::string anydesk_exe;
 
 class Conn {
     
@@ -17,9 +24,18 @@ class Conn {
 
         int connect()
         {
-            std::string c_exe = (std::string)AD_EXE;
-            std::string command = c_exe.append(((std::string)" ").append((anydesk_id)));
-            return std::system(command.c_str());
+            std::string c_exe = (std::string) anydesk_exe;
+            std::string command = c_exe.append(((std::string) " ").append((anydesk_id)));
+            
+            auto c_value = std::system(command.c_str());
+
+            if (c_value == 1)
+            {
+                std::cout << "Caminho ou executavel AnyDesk invalido." << std::endl;
+                std::cout << "verifique no arquivo localizado em \"" << (std::string) CONF_F << "\"" << std::endl;
+            }
+
+            return c_value;
         }
 };
 
@@ -43,6 +59,63 @@ int main(int argc, char** argv)
     victor_conn.selection_option = "V";
 
     std::list<Conn> conns = { alex_conn, gabriel_conn, victor_conn };
+
+    std::experimental::filesystem::create_directory(ANYDESK_CONN_F);
+    
+    bool has_anydesk_exe = false;
+    std::fstream fconfig_f;
+    fconfig_f.open(CONF_F);
+
+    if (fconfig_f.is_open())
+    {
+        std::string line;
+        auto line_c = 1;
+
+        while (std::getline(fconfig_f, line))
+        {
+            if (line.rfind("AnydeskExe=", 0) == 0)
+            {
+                auto f_separator = false;
+                std::string exe_v = "";
+
+                for (auto i = 0; i < line.size(); i++)
+                {
+                    if (!f_separator && line[i] == '=')
+                    {
+                        f_separator = true;
+                        continue;
+                    }
+
+                    if (f_separator)
+                    {
+                        exe_v += line[i];
+                    }
+                }
+
+                has_anydesk_exe = true;
+                anydesk_exe = "\"" + exe_v + "\"";
+            }
+
+            line_c++;
+        }
+    }
+   
+    fconfig_f.close();
+
+    if (!has_anydesk_exe)
+    {
+        std::ofstream ofconfig_f;
+        ofconfig_f.open(CONF_F);
+
+        if (ofconfig_f.is_open())
+        {
+            ofconfig_f << "AnydeskExe=" << "Insira a localizacao do executavel do AnyDesk aqui" << std::endl;
+        }
+
+        ofconfig_f.close();
+        std::cout << "Faltando configuracao do executavel AnyDesk, verifique no arquivo localizado em \"" << (std::string) CONF_F << "\"" << std::endl;
+        return 0;
+    }
 
     for (int i = 0; i < argc; ++i)
     {
