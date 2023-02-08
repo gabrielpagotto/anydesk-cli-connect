@@ -39,23 +39,11 @@ public:
 int main(int argc, char** argv)
 {
 	SetConsoleOutputCP(65001);
-	Conn alex_conn;
-	alex_conn.name = "Alex";
-	alex_conn.anydesk_id = "761515821";
-	alex_conn.selection_option = "A";
-	Conn gabriel_conn;
-	gabriel_conn.name = "Gabriel";
-	gabriel_conn.anydesk_id = "249558384";
-	gabriel_conn.selection_option = "G";
-	Conn victor_conn;
-	victor_conn.name = "Victor";
-	victor_conn.anydesk_id = "686573251";
-	victor_conn.selection_option = "V";
-	std::list<Conn> conns = { alex_conn, gabriel_conn, victor_conn };
+	std::list<Conn> conns = { };
 	std::experimental::filesystem::create_directory(ANYDESK_CONN_F);
-	bool has_anydesk_exe = false;
 	std::fstream fconfig_f;
 	fconfig_f.open(CONF_F);
+	bool has_anydesk_exe = false;
 	if (fconfig_f.is_open())
 	{
 		std::string line;
@@ -83,7 +71,42 @@ int main(int argc, char** argv)
 			}
 			else if (line.rfind("IConn=", 0) == 0)
 			{
-
+				auto s_counter = 0;
+				Conn conn;
+				conn.name = "";
+				conn.anydesk_id = "";
+				conn.selection_option = "";
+				for (auto i = 0; i < line.size(); i++)
+				{
+					if ((s_counter == 0 && line[i] == '=') || (s_counter > 0 && line[i] == ';'))
+					{
+						s_counter++;
+						continue;
+					}
+					if (s_counter == 1)
+					{
+						conn.selection_option += line[i];
+						continue;
+					}
+					if (s_counter == 2)
+					{
+						conn.anydesk_id += line[i];
+						continue;
+					}
+					if (s_counter == 3)
+					{
+						conn.name += line[i];
+						continue;
+					}
+					if (s_counter > 3)
+					{
+						break;
+					}
+				}
+				std::list<Conn>::iterator it;
+				it = conns.begin();
+				it++;
+				conns.insert(it, conn);
 			}
 			line_c++;
 		}
